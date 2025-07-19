@@ -11,14 +11,13 @@ import Charts
 public struct ChartView: View {
     @ObservedObject private var model: Self.Model
     
-    // Initializer remains the same
     public init(model: Self.Model) {
         self.model = model
     }
     
     public var body: some View {
         VStack {
-//            menu
+            menu
             chartView
         }
         .navigationTitle("Monthly Sales Trend")
