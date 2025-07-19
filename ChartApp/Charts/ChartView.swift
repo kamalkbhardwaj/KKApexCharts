@@ -37,8 +37,5 @@ public struct ChartView: View {
 }
 
 #Preview {
-    NavigationView {
-        ChartView(model: .init())
-            .navigationTitle("Charts")
-    }
+    ChartView(model: .init())
 }

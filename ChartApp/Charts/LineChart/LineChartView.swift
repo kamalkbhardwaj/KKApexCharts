@@ -20,11 +20,12 @@ struct LineChartView: View {
             menu
             chartView
         }
-        .navigationTitle("Monthly Sales Trend")
     }
     
     private var menu: some View {
         VStack {
+            Text("Monthly Sales Trend")
+                .font(.title2)
             Menu(model.interpolationMethod.description) {
                 ForEach(model.allInterpolationMethods, id: \.self) { method in
                     Button(method.description) {
@@ -104,8 +105,5 @@ private struct ChartLegend: View {
 }
 
 #Preview {
-    NavigationView {
-        ChartView(model: .init())
-            .navigationTitle("Charts")
-    }
+    LineChartView(model: .init())
 }
