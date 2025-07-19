@@ -11,7 +11,7 @@ import SwiftUI
 struct ChartAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ChartView(model: .init(interpolationMethod: .linear, lineWidth: 2.0))
         }
     }
 }

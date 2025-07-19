@@ -27,6 +27,7 @@
 		8E23CF152D187D95009BD98B /* ChartApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChartApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E23CF252D187D97009BD98B /* ChartAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChartAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E23CF2F2D187D97009BD98B /* ChartAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChartAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E5E4AC32D1942D300DF492F /* Test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Test.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -76,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				8E23CF172D187D95009BD98B /* ChartApp */,
+				8E5E4AC32D1942D300DF492F /* Test.playground */,
 				8E23CF282D187D97009BD98B /* ChartAppTests */,
 				8E23CF322D187D97009BD98B /* ChartAppUITests */,
 				8E23CF162D187D95009BD98B /* Products */,
