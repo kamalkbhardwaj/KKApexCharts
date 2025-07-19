@@ -25,7 +25,12 @@ public struct ChartView: View {
     
     private var scrollView: some View {
         ScrollView {
-            LineChartView(model: .init())
+            LineChartView(
+                model: .init(
+                    interpolationMethod: .linear,
+                    lineWidth: 2.0
+                )
+            )
         }
         .scrollIndicators(.hidden)
     }
