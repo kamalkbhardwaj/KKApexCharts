@@ -89,7 +89,7 @@ struct LineChartView: View {
     }
 }
     
-private struct ChartLegend: View {
+struct ChartLegend: View {
     let color: Color
     let title: String
     

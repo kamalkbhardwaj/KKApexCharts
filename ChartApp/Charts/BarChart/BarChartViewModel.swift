@@ -14,8 +14,10 @@ extension BarChartView {
     public final class Model: ObservableObject {
         
         @Published var data: [SalesData] = []
+        let stackType: MarkStackingMethod
         
-        public init () {
+        public init (stackType: MarkStackingMethod = .standard) {
+            self.stackType = stackType
             self.prepareData()
         }
         
