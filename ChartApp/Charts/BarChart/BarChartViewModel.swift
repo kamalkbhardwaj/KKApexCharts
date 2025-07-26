@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Charts
 
 extension BarChartView {
@@ -15,9 +16,11 @@ extension BarChartView {
         
         @Published var data: [SalesData] = []
         let stackType: MarkStackingMethod
+        let style: Style
         
-        public init (stackType: MarkStackingMethod = .standard) {
+        public init (stackType: MarkStackingMethod = .standard, style: Style = .grouped) {
             self.stackType = stackType
+            self.style = style
             self.prepareData()
         }
         
@@ -36,6 +39,28 @@ extension BarChartView {
                 SalesData(month: "May", sales: 1350, year: "2025"),
                 SalesData(month: "Jun", sales: 1580, year: "2025"),
             ]
+        }
+        
+        var plotAreaHeight: CGFloat {
+            switch style {
+            case .grouped: 320.0
+            case .oneD: 40.0
+            case .interval: 200.0
+            }
+        }
+        
+        var xAxisVisibility: Visibility {
+            .visible
+        }
+        
+        var yAxisVisibility: Visibility {
+            style == .oneD ? .hidden : .visible
+        }
+        
+        public enum Style {
+            case grouped
+            case oneD
+            case interval
         }
     }
     
