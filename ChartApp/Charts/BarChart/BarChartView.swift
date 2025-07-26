@@ -27,8 +27,10 @@ public struct BarChartView: View {
                 barChart(dataPoint)
             case .oneD:
                 oneDChart(dataPoint)
-            case .interval:
-                intervalChart(dataPoint)
+            case .progress:
+                progress(dataPoint)
+            case .pulse:
+                pulse(dataPoint)
             }
         }
         .chartPlotStyle(content: { content in
@@ -37,6 +39,7 @@ public struct BarChartView: View {
         })
         .chartXAxis(self.model.xAxisVisibility)
         .chartYAxis(self.model.yAxisVisibility)
+        .chartLegend(self.model.legendVisibility)
         .chartXAxis {
             AxisMarks(
                 preset: .aligned,
@@ -79,10 +82,6 @@ public struct BarChartView: View {
         )
         .position(by: .value("Year", dataPoint.year))
         .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
-        .annotation {
-            Text("\(Int(dataPoint.sales))")
-                .font(.caption2)
-        }
     }
     
     private func oneDChart(_ dataPoint: Self.SalesData) -> some ChartContent {
@@ -93,15 +92,27 @@ public struct BarChartView: View {
         .foregroundStyle(by: .value("Year", dataPoint.year))
     }
     
-    private func intervalChart(_ dataPoint: Self.SalesData) -> some ChartContent {
+    private func progress(_ dataPoint: Self.SalesData) -> some ChartContent {
         BarMark(
-            x: .value("Month", dataPoint.month),
-            y: .value("Sales", dataPoint.sales),
-            stacking: .unstacked
+            xStart: .value("Month", dataPoint.previousMonth),
+            xEnd: .value("Month", dataPoint.month),
+            y: .value("Sales", dataPoint.sales)
         )
         .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
         .foregroundStyle(by: .value("Year", dataPoint.year))
     }
+    
+    private func pulse(_ dataPoint: Self.SalesData) -> some ChartContent {
+        BarMark(
+            x: .value("Month", dataPoint.month),
+            yStart: .value("Sales", dataPoint.previousSales),
+            yEnd: .value("Sales", dataPoint.sales),
+            width: .fixed(12.0)
+        )
+        .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
+        .foregroundStyle(by: .value("Year", dataPoint.year))
+    }
+    
 }
 
 #Preview("Grouped") {
@@ -113,7 +124,10 @@ public struct BarChartView: View {
 }
 
 #Preview("Interval") {
-    BarChartView(model: .init(stackType: .standard, style: .oneD))
+    VStack {
+        BarChartView(model: .init(stackType: .standard, style: .progress))
+        BarChartView(model: .init(stackType: .standard, style: .pulse))
+    }
 }
 
 #Preview("Stacking Style", traits: .landscapeRight) {
