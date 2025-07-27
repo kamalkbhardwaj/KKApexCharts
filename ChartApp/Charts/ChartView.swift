@@ -34,7 +34,29 @@ public struct ChartView: View {
             
             BarChartView(
                 model: .init(
-                    stackType: .standard
+                    stackType: .standard,
+                    style: .grouped
+                )
+            )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .oneD
+                )
+            )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .progress
+                )
+            )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .pulse
                 )
             )
         }

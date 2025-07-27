@@ -42,13 +42,18 @@ public struct BarChartView: View {
         .chartLegend(self.model.legendVisibility)
         .chartXAxis {
             AxisMarks(
-                preset: .aligned,
+                preset: .extended,
                 position: .bottom,
-                values: .automatic(desiredCount: 10, roundUpperBound: true)
+                values: .automatic
             ) { value in
                 AxisTick(length: .label)
                 AxisGridLine()
-                AxisValueLabel()
+                AxisValueLabel {
+                    Text("[\(value.as(String.self) ?? "")]")
+                        .foregroundStyle(Color.green)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
             }
         }
         .chartYAxis {
@@ -58,7 +63,12 @@ public struct BarChartView: View {
             ) { value in
                 AxisTick()
                 AxisGridLine()
-                AxisValueLabel()
+                AxisValueLabel {
+                    Text("\(value.as(Int.self) ?? 0)")
+                        .foregroundStyle(Color.orange)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
             }
         }
         .chartLegend(
@@ -71,6 +81,10 @@ public struct BarChartView: View {
                 ChartLegend(color: .red, title: "2025")
             }
         }
+        .chartScrollableAxes(.horizontal)
+        .chartXVisibleDomain(length: 3)
+        .chartScrollPosition(initialX: "Mar")
+        .frame(height: self.model.plotAreaHeight)
         .padding()
     }
     
@@ -78,10 +92,14 @@ public struct BarChartView: View {
         BarMark(
             x: .value("Month", dataPoint.month),
             y: .value("Sales", dataPoint.sales),
+            width: .fixed(20.0),
             stacking: self.model.stackType
         )
         .position(by: .value("Year", dataPoint.year))
         .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
+        .annotation {
+            Text("\(Int(dataPoint.sales))")
+        }
     }
     
     private func oneDChart(_ dataPoint: Self.SalesData) -> some ChartContent {
@@ -147,4 +165,3 @@ public struct BarChartView: View {
         .navigationTitle("Bar Charts")
     }
 }
-
