@@ -1,0 +1,167 @@
+//
+//  BarChartView.swift
+//  ChartApp
+//
+//  Created by Kamal Kishor on 19/07/25.
+//
+
+import SwiftUI
+import Charts
+
+public struct BarChartView: View {
+    
+    @ObservedObject private var model: Self.Model
+    
+    public init(model: Self.Model) {
+        self.model = model
+    }
+    
+    public var body: some View {
+        chartView
+    }
+    
+    private var chartView: some View {
+        Chart(self.model.data) { dataPoint in
+            switch self.model.style {
+            case .grouped:
+                barChart(dataPoint)
+            case .oneD:
+                oneDChart(dataPoint)
+            case .progress:
+                progress(dataPoint)
+            case .pulse:
+                pulse(dataPoint)
+            }
+        }
+        .chartPlotStyle(content: { content in
+            content
+                .frame(height: self.model.plotAreaHeight)
+        })
+        .chartXAxis(self.model.xAxisVisibility)
+        .chartYAxis(self.model.yAxisVisibility)
+        .chartLegend(self.model.legendVisibility)
+        .chartXAxis {
+            AxisMarks(
+                preset: .extended,
+                position: .bottom,
+                values: .automatic
+            ) { value in
+                AxisTick(length: .label)
+                AxisGridLine()
+                AxisValueLabel {
+                    Text("[\(value.as(String.self) ?? "")]")
+                        .foregroundStyle(Color.green)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
+            }
+        }
+        .chartYAxis {
+            AxisMarks(
+                position: .leading,
+                values: .automatic
+            ) { value in
+                AxisTick()
+                AxisGridLine()
+                AxisValueLabel {
+                    Text("\(value.as(Int.self) ?? 0)")
+                        .foregroundStyle(Color.orange)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
+            }
+        }
+        .chartLegend(
+            position: .top,
+            alignment: .trailing,
+            spacing: 24.0
+        ) {
+            HStack(spacing: 12.0) {
+                ChartLegend(color: .blue, title: "2024")
+                ChartLegend(color: .red, title: "2025")
+            }
+        }
+        .chartScrollableAxes(.horizontal)
+        .chartXVisibleDomain(length: 3)
+        .chartScrollPosition(initialX: "Mar")
+        .frame(height: self.model.plotAreaHeight)
+        .padding()
+    }
+    
+    private func barChart(_ dataPoint: Self.SalesData) -> some ChartContent {
+        BarMark(
+            x: .value("Month", dataPoint.month),
+            y: .value("Sales", dataPoint.sales),
+            width: .fixed(20.0),
+            stacking: self.model.stackType
+        )
+        .position(by: .value("Year", dataPoint.year))
+        .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
+        .annotation {
+            Text("\(Int(dataPoint.sales))")
+        }
+    }
+    
+    private func oneDChart(_ dataPoint: Self.SalesData) -> some ChartContent {
+        BarMark(
+            x: .value("Sales", dataPoint.sales)
+        )
+        .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
+        .foregroundStyle(by: .value("Year", dataPoint.year))
+    }
+    
+    private func progress(_ dataPoint: Self.SalesData) -> some ChartContent {
+        BarMark(
+            xStart: .value("Month", dataPoint.previousMonth),
+            xEnd: .value("Month", dataPoint.month),
+            y: .value("Sales", dataPoint.sales)
+        )
+        .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
+        .foregroundStyle(by: .value("Year", dataPoint.year))
+    }
+    
+    private func pulse(_ dataPoint: Self.SalesData) -> some ChartContent {
+        BarMark(
+            x: .value("Month", dataPoint.month),
+            yStart: .value("Sales", dataPoint.previousSales),
+            yEnd: .value("Sales", dataPoint.sales),
+            width: .fixed(12.0)
+        )
+        .foregroundStyle(dataPoint.year == "2024" ? Color.blue : Color.red)
+        .foregroundStyle(by: .value("Year", dataPoint.year))
+    }
+    
+}
+
+#Preview("Grouped") {
+    BarChartView(model: .init(stackType: .standard, style: .grouped))
+}
+
+#Preview("One-D", traits: .landscapeRight) {
+    BarChartView(model: .init(stackType: .standard, style: .oneD))
+}
+
+#Preview("Interval") {
+    VStack {
+        BarChartView(model: .init(stackType: .standard, style: .progress))
+        BarChartView(model: .init(stackType: .standard, style: .pulse))
+    }
+}
+
+#Preview("Stacking Style", traits: .landscapeRight) {
+    NavigationView {
+        HStack(spacing: 24.0) {
+            BarChartView(model: .init(stackType: .standard))
+                .frame(width: 160)
+            BarChartView(model: .init(stackType: .normalized))
+                .frame(width: 160)
+            BarChartView(model: .init(stackType: .center))
+                .frame(width: 160)
+            BarChartView(model: .init(stackType: .unstacked))
+                .frame(width: 160)
+        }
+        .padding(.leading, 40.0)
+        .scrollIndicators(.hidden)
+        .navigationTitle("Bar Charts")
+    }
+}

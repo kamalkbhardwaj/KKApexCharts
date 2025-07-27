@@ -31,6 +31,34 @@ public struct ChartView: View {
                     lineWidth: 2.0
                 )
             )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .grouped
+                )
+            )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .oneD
+                )
+            )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .progress
+                )
+            )
+            
+            BarChartView(
+                model: .init(
+                    stackType: .standard,
+                    style: .pulse
+                )
+            )
         }
         .scrollIndicators(.hidden)
     }
